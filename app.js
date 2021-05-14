@@ -13,7 +13,7 @@ var latestPrice = 0;
 discord_bot.login(process.env.DISCORD_BOT_TOKEN);
 discord_bot.on('ready', async () => {
     discordChannels.price_watch.instance = await discord_bot.channels.fetch(discordChannels.price_watch.id);
-    setInterval(echoLatestPrice, 60000);
+    setInterval(echoLatestPrice, process.env.AUTO_ECHO_PRICE_INTERVAL * 1000);
 });
 discord_bot.on('message', msg => {
     if(msg.content.substr(0,6) == '$PRICE'){
