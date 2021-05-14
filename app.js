@@ -5,21 +5,28 @@ const requestBNB = fs.readFileSync(path.join(__dirname, 'request-bnb.txt')).toSt
 const requestTiddy = fs.readFileSync(path.join(__dirname, 'request-tiddy.txt')).toString();
 const Discord = require('discord.js');
 const discord_bot = new Discord.Client();
-const main_chat_id = "842534142327259150";
-var channel;
+const discordChannels = {
+    price_watch: { id: "842538295170564157", instance: null}
+};
+var latestPrice = 0;
 
 discord_bot.login(process.env.DISCORD_BOT_TOKEN);
 discord_bot.on('ready', async () => {
-    channel = await discord_bot.channels.fetch(main_chat_id);
-    echoLatestPrice();
+    discordChannels.price_watch.instance = await discord_bot.channels.fetch(discordChannels.price_watch.id);\
     setInterval(echoLatestPrice, 60000);
+});
+bot.on('message', msg => {
+    if(msg.content.substr(0,6) == '$PRICE'){
+        msg.channel.send(`AnimeTiddies Live Price: $${price_per_tiddy}`);
+    }
 });
 
 async function echoLatestPrice(){
     let [bnb_price, tiddies_per_bnb] = await Promise.all([getBNBPrice(), getTiddiesPerBNB()]);
     let pancakeswap_price = tiddies_per_bnb*0.9975;
     let price_per_tiddy = ((1/pancakeswap_price)*bnb_price).toFixed(10);
-    channel.send(`AnimeTiddies Live Price: $${price_per_tiddy}`);
+    latestPrice = price_per_tiddy;
+    discordChannels.price_watch.instance.send(`AnimeTiddies Live Price: $${price_per_tiddy}`);
 }
 
 function getBNBPrice(){
