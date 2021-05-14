@@ -40,7 +40,7 @@ function getLatestPriceMessage(){
 async function setLatestPrice(){
     let [bnb_price, tiddies_per_bnb] = await Promise.all([getBNBPrice(), getTiddiesPerBNB()]);
     let pancakeswap_price = tiddies_per_bnb*0.9975;
-    let newPrice = ((1/pancakeswap_price)*bnb_price).toFixed(10);
+    let newPrice = ((1/pancakeswap_price)*bnb_price).toFixed(8);
     lastPrice = latestPrice;
     latestPrice = newPrice;
     let priceMovement = lastPrice > latestPrice ? '📉' : '📈';
