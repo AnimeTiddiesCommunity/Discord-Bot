@@ -20,7 +20,7 @@ discord_bot.on('ready', async () => {
 });
 discord_bot.on('message', msg => {
     if(msg.content.substr(0,6) == '$PRICE'){
-        if(price == 0){
+        if(latestPrice == 0){
             setLatestPrice().then(() => {
                 msg.channel.send(`AnimeTiddies Live Price: $${latestPrice}`);
             })
