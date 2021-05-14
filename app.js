@@ -3,6 +3,7 @@ const axios = require('axios').default;
 const path = require('path'), fs = require('fs');
 const requestBNB = fs.readFileSync(path.join(__dirname, 'request-bnb.txt')).toString();
 const requestTiddy = fs.readFileSync(path.join(__dirname, 'request-tiddy.txt')).toString();
+const buyText = fs.readFileSync(path.join(__dirname, 'buy.txt')).toString();
 const Discord = require('discord.js');
 const discord_bot = new Discord.Client();
 const discordChannels = {
@@ -17,14 +18,19 @@ discord_bot.on('ready', async () => {
     setInterval(setLatestPrice, process.env.AUTO_ECHO_PRICE_INTERVAL * 1000);
 });
 discord_bot.on('message', msg => {
-    if(msg.content.substr(0,6).toUpperCase() == '$PRICE'){
-        if(latestPrice == 0){
-            setLatestPrice().then(() => {
+    if(msg.content.substr(0,1) == '$'){
+        if(msg.content.substr(0,6).toUpperCase() == '$PRICE'){
+            if(latestPrice == 0){
+                setLatestPrice().then(() => {
+                    msg.channel.send(getLatestPriceMessage());
+                })
+            }
+            else{
                 msg.channel.send(getLatestPriceMessage());
-            })
+            }
         }
-        else{
-            msg.channel.send(getLatestPriceMessage());
+        else if(msg.content.substr(0,4).toUpperCase() == '$BUY'){
+            msg.channel.send(buyText);
         }
     }
 });
@@ -40,13 +46,13 @@ function getLatestPriceMessage(){
 async function setLatestPrice(){
     let [bnb_price, tiddies_per_bnb] = await Promise.all([getBNBPrice(), getTiddiesPerBNB()]);
     let pancakeswap_price = tiddies_per_bnb*0.9975;
-    let newPrice = ((1/pancakeswap_price)*bnb_price).toFixed(8);
+    let newPrice = ((1/pancakeswap_price)*bnb_price).toFixed(10);
     lastPrice = latestPrice;
     latestPrice = newPrice;
     let priceMovement = lastPrice > latestPrice ? '📉' : '📈';
     let guild = await discord_bot.guilds.fetch("842534142327259147");
     let member = await guild.members.fetch(discord_bot.user.id);
-    member.setNickname(`${priceMovement} $${latestPrice}`);
+    member.setNickname(`${priceMovement} $${latestPrice.toFixed(8)}`);
 }
 
 function getBNBPrice(){

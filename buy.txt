@@ -1,0 +1,8 @@
+If you already have a Trust Wallet or Binance Chain Wallet with some BNB loaded go to pancakeswap
+https://exchange.pancakeswap.finance/#/swap?outputCurrency=0x2c7fd21f49937477fab50a96b0c55211cf7bd6ca
+Press unlock wallet & select your wallet
+Enter the amount of BNB you would like to spend, or the amount of $TIDDIES you want to buy fire 
+Press Swap and then Confirm Swap
+Finally authorize the transaction
+Within a few moments you should see a notification pop up in the top left corner indicating whether or not the swap was successful.
+If you're getting errors, try increasing the slippage, a higher slippage is more important when the price is changing a lot due to lots of trading volume.
