@@ -17,7 +17,7 @@ discord_bot.on('ready', async () => {
     setInterval(setLatestPrice, process.env.AUTO_ECHO_PRICE_INTERVAL * 1000);
 });
 discord_bot.on('message', msg => {
-    if(msg.content.substr(0,6) == '$PRICE'){
+    if(msg.content.substr(0,6).toUpperCase() == '$PRICE'){
         if(latestPrice == 0){
             setLatestPrice().then(() => {
                 msg.channel.send(getLatestPriceMessage());
@@ -29,7 +29,6 @@ discord_bot.on('message', msg => {
     }
 });
 
-/*
 function getLatestPriceMessage(){
     var priceMovement = lastPrice > latestPrice ? '📉' : '📈';
     var pricePercentage = ((latestPrice / lastPrice) * 100).toFixed(1);
@@ -37,7 +36,6 @@ function getLatestPriceMessage(){
     return `AnimeTiddies Live Price
     ${priceMovement} $${latestPrice} ${pricePercentage >= 100.5 || pricePercentage <= 99.5 ? ` | ${priceMovePercentage}` : ''}`;
 }
-*/
 
 async function setLatestPrice(){
     let [bnb_price, tiddies_per_bnb] = await Promise.all([getBNBPrice(), getTiddiesPerBNB()]);
@@ -46,9 +44,9 @@ async function setLatestPrice(){
     lastPrice = latestPrice;
     latestPrice = newPrice;
     let priceMovement = lastPrice > latestPrice ? '📉' : '📈';
-    discord_bot.user.edit({
-        username: `${priceMovement} $${latestPrice}`
-    })
+    let guild = await discord_bot.guilds.fetch("842534142327259147");
+    let member = await guild.members.fetch(discord_bot.user.id);
+    member.setNickname(`${priceMovement} $${latestPrice}`);
 }
 
 function getBNBPrice(){
