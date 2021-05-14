@@ -15,7 +15,7 @@ discord_bot.on('ready', async () => {
     discordChannels.price_watch.instance = await discord_bot.channels.fetch(discordChannels.price_watch.id);
     setInterval(echoLatestPrice, 60000);
 });
-bot.on('message', msg => {
+discord_bot.on('message', msg => {
     if(msg.content.substr(0,6) == '$PRICE'){
         msg.channel.send(`AnimeTiddies Live Price: $${price_per_tiddy}`);
     }
