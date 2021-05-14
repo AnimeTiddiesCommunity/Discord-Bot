@@ -1,0 +1,27 @@
+{
+  ethereum(network: bsc) {
+    dexTrades(
+      quoteCurrency: {is: "0x2c7fd21f49937477fab50a96b0c55211cf7bd6ca"}
+      baseCurrency: {is: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"}
+      options: {desc: ["block.height", "transaction.index"], limit: 1}
+    ) {
+      baseCurrency {
+        symbol
+        address
+      }
+      quoteCurrency {
+        symbol
+        address
+      }
+      quoteAmount
+      quotePrice
+      side
+      block {
+        height
+      }
+      transaction {
+        index
+      }
+    }
+  }
+}
