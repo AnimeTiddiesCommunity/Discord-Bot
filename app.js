@@ -17,7 +17,7 @@ discord_bot.on('ready', async () => {
 });
 discord_bot.on('message', msg => {
     if(msg.content.substr(0,6) == '$PRICE'){
-        msg.channel.send(`AnimeTiddies Live Price: $${price_per_tiddy}`);
+        msg.channel.send(`AnimeTiddies Live Price: $${latestPrice}`);
     }
 });
 
