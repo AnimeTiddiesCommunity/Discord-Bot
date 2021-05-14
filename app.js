@@ -40,13 +40,13 @@ function getLatestPriceMessage(){
     var pricePercentage = lastPrice > 0 ? ((latestPrice / lastPrice) * 100).toFixed(1) : 100.0;
     var priceMovePercentage = lastPrice > latestPrice ? `-${pricePercentage}%` : `+${pricePercentage}%`;
     return `AnimeTiddies Live Price
-    ${priceMovement} $${latestPrice} ${pricePercentage >= 100.5 || pricePercentage <= 99.5 ? ` | ${priceMovePercentage}` : ''}`;
+    ${priceMovement} $${latestPrice.toFixed(8)} ${pricePercentage >= 100.5 || pricePercentage <= 99.5 ? ` | ${priceMovePercentage}` : ''}`;
 }
 
 async function setLatestPrice(){
     let [bnb_price, tiddies_per_bnb] = await Promise.all([getBNBPrice(), getTiddiesPerBNB()]);
     let pancakeswap_price = tiddies_per_bnb*0.9975;
-    let newPrice = ((1/pancakeswap_price)*bnb_price).toFixed(10);
+    let newPrice = ((1/pancakeswap_price)*bnb_price);
     lastPrice = latestPrice;
     latestPrice = newPrice;
     let priceMovement = lastPrice > latestPrice ? '📉' : '📈';
