@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "install": "selenium-standalone install"
+    "run": "nodemon app"
   },
   "keywords": [],
   "author": "",
