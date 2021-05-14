@@ -31,7 +31,7 @@ discord_bot.on('message', msg => {
 
 function getLatestPriceMessage(){
     var priceMovement = lastPrice > latestPrice ? '📉' : '📈';
-    var pricePercentage = ((latestPrice / lastPrice) * 100).toFixed(1);
+    var pricePercentage = lastPrice > 0 ? ((latestPrice / lastPrice) * 100).toFixed(1) : 100.0;
     var priceMovePercentage = lastPrice > latestPrice ? `-${pricePercentage}%` : `+${pricePercentage}%`;
     return `AnimeTiddies Live Price
     ${priceMovement} $${latestPrice} ${pricePercentage >= 100.5 || pricePercentage <= 99.5 ? ` | ${priceMovePercentage}` : ''}`;
