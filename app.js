@@ -8,33 +8,44 @@ const discord_bot = new Discord.Client();
 const discordChannels = {
     price_watch: { id: "842538295170564157", instance: null}
 };
-var latestPrice = 0;
+var lastPrice = 0,
+latestPrice = 0;
 
 discord_bot.login(process.env.DISCORD_BOT_TOKEN);
 discord_bot.on('ready', async () => {
     discordChannels.price_watch.instance = await discord_bot.channels.fetch(discordChannels.price_watch.id);
     setInterval(async () => {
         await setLatestPrice();
-        discordChannels.price_watch.instance.send(`AnimeTiddies Live Price: $${latestPrice}`);
+        discordChannels.price_watch.instance.send(getLatestPriceMessage());
     }, process.env.AUTO_ECHO_PRICE_INTERVAL * 1000);
 });
 discord_bot.on('message', msg => {
     if(msg.content.substr(0,6) == '$PRICE'){
         if(latestPrice == 0){
             setLatestPrice().then(() => {
-                msg.channel.send(`AnimeTiddies Live Price: $${latestPrice}`);
+                msg.channel.send(getLatestPriceMessage());
             })
         }
         else{
-            msg.channel.send(`AnimeTiddies Live Price: $${latestPrice}`);
+            msg.channel.send(getLatestPriceMessage());
         }
     }
 });
 
+function getLatestPriceMessage(){
+    var priceMovement = lastPrice > latestPrice ? '📉' : '📈';
+    var pricePercentage = ((latestPrice / lastPrice) * 100).toFixed(0);
+    var priceMovePercentage = lastPrice > latestPrice ? `-${pricePercentage}%` : `+${pricePercentage}%`;
+    return `AnimeTiddies Live Price
+    ${priceMovement} $${latestPrice} ${pricePercentage > 100 || pricePercentage < 100 ? ` | ${priceMovePercentage}` : ''}`;
+}
+
 async function setLatestPrice(){
     let [bnb_price, tiddies_per_bnb] = await Promise.all([getBNBPrice(), getTiddiesPerBNB()]);
     let pancakeswap_price = tiddies_per_bnb*0.9975;
-    latestPrice = ((1/pancakeswap_price)*bnb_price).toFixed(10);
+    let newPrice = ((1/pancakeswap_price)*bnb_price).toFixed(10);
+    lastPrice = latestPrice;
+    latestPrice = newPrice;
 }
 
 function getBNBPrice(){
