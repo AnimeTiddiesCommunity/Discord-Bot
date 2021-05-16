@@ -39,8 +39,9 @@ function getLatestPriceMessage(){
     var priceMovement = lastPrice > latestPrice ? '📉' : '📈';
     var pricePercentage = lastPrice > 0 ? ((latestPrice / lastPrice) * 100).toFixed(1) : 100.0;
     var priceMovePercentage = lastPrice > latestPrice ? `-${pricePercentage}%` : `+${pricePercentage}%`;
+    pricePercentage -= 100;
     return `AnimeTiddies Live Price
-    ${priceMovement} $${latestPrice.toFixed(8)} ${pricePercentage >= 100.5 || pricePercentage <= 99.5 ? ` | ${priceMovePercentage}` : ''}`;
+    ${priceMovement} $${latestPrice.toFixed(8)} ${pricePercentage >= 0.5 || pricePercentage <= -0.5 ? ` | ${priceMovePercentage}` : ''}`;
 }
 
 async function setLatestPrice(){
