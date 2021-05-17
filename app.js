@@ -51,6 +51,11 @@ async function setLatestPrice(){
     lastPrice = latestPrice;
     latestPrice = newPrice;
     let priceMovement = lastPrice > latestPrice ? '📉' : '📈';
+    fs.writeFileSync(path.join(__dirname,'latest-price.json'), JSON.stringify({
+        last_price: lastPrice,
+        latest_price: latestPrice,
+        price_movement: priceMovement
+    }))
     let guild = await discord_bot.guilds.fetch("842534142327259147");
     let member = await guild.members.fetch(discord_bot.user.id);
     member.setNickname(`${priceMovement} $${latestPrice.toFixed(8)}`);
