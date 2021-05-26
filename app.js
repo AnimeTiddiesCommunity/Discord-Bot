@@ -4,6 +4,7 @@ const path = require('path'), fs = require('fs');
 const requestBNB = fs.readFileSync(path.join(__dirname, 'request-bnb.txt')).toString();
 const requestTiddy = fs.readFileSync(path.join(__dirname, 'request-tiddy.txt')).toString();
 const buyText = fs.readFileSync(path.join(__dirname, 'buy.txt')).toString();
+const contractText = fs.readFileSync(path.join(__dirname, 'contract.txt')).toString();
 const Discord = require('discord.js');
 const discord_bot = new Discord.Client();
 const discordChannels = {
@@ -32,14 +33,16 @@ discord_bot.on('message', msg => {
         else if(msg.content.substr(0,4).toUpperCase() == '$BUY'){
             msg.channel.send(buyText);
         }
+        else if(msg.content.substr(0,4).toUpperCase() == '$CONTRACT'){
+            msg.channel.send(contractText);
+        }
     }
 });
 
 function getLatestPriceMessage(){
     var priceMovement = lastPrice > latestPrice ? '📉' : '📈';
-    var pricePercentage = lastPrice > 0 ? ((latestPrice / lastPrice) * 100).toFixed(1) : 100.0;
+    var pricePercentage = lastPrice > 0 ? (latestPrice / lastPrice).toFixed(1) : 0;
     var priceMovePercentage = lastPrice > latestPrice ? `-${pricePercentage}%` : `+${pricePercentage}%`;
-    pricePercentage -= 100;
     return `AnimeTiddies Live Price
     ${priceMovement} $${latestPrice.toFixed(8)} ${pricePercentage >= 0.5 || pricePercentage <= -0.5 ? ` | ${priceMovePercentage}` : ''}`;
 }
