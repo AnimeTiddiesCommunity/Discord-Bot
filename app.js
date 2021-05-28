@@ -2,6 +2,7 @@ require('dotenv').config();
 const axios = require('axios').default;
 const path = require('path'), fs = require('fs');
 const buyText = fs.readFileSync(path.join(__dirname, 'buy.txt')).toString();
+const contractText = fs.readFileSync(path.join(__dirname, 'contract.txt')).toString();
 const Discord = require('discord.js');
 const discord_bot = new Discord.Client();
 const discordChannels = {
@@ -23,6 +24,9 @@ discord_bot.on('message', async (msg) => {
         }
         else if(msg.content.substr(0,4).toUpperCase() == '$BUY'){
             msg.channel.send(buyText);
+        }
+        else if(msg.content.substr(0,4).toUpperCase() == '$CONTRACT'){
+            msg.channel.send(contractText);
         }
     }
 });
